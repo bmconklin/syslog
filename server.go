@@ -114,7 +114,7 @@ func (s *Server) passToHandlers(m *Message) {
 
 func (s *Server) receiver(c net.Conn) {
 	//q := (chan<- Message)(s.q)
-	buf := make([]byte, 1024)
+	buf := make([]byte, 1024 * 32)
 	for {
 		n, err := c.Read(buf)
 		if err != nil {
