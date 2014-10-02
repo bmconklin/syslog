@@ -3,13 +3,14 @@
 package syslog
 
 import (
-	"bytes"
+	"os"
 	"log"
 	"net"
-	"os"
+	"time"
+        "bufio"
+	"bytes"
 	"strconv"
 	"strings"
-	"time"
 	"unicode"
 )
 
@@ -114,19 +115,19 @@ func (s *Server) passToHandlers(m *Message) {
 
 func (s *Server) receiver(c net.Conn) {
 	//q := (chan<- Message)(s.q)
-	buf := make([]byte, 1024 * 32)
+	buf := bufio.NewReader(c)
 	for {
-		n, err := c.Read(buf)
+		pkt, err := buf.ReadBytes('\n')
 		if err != nil {
 			if !s.shutdown {
 				s.l.Fatalln("Read error:", err)
 			}
 			return
 		}
-		pkt := buf[:n]
 
 		m := new(Message)
 		m.Time = time.Now()
+                var n int
 
 		// Parse priority (if exists)
 		prio := 13 // default priority
