@@ -45,10 +45,7 @@ func (h *BaseHandler) Handle(m *Message) *Message {
 		return m
 	}
 	// Try queue m
-	select {
-	case h.queue <- m:
-	default:
-	}
+	h.queue <- m
 	if h.ft {
 		return m
 	}
