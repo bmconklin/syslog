@@ -166,6 +166,9 @@ func (s *Server) receiver(c net.Conn) {
 
         // Parse msg part
         msg := string(bytes.TrimRightFunc(pkt, isNulCrLf))
+        if msg[0] != ' ' {
+            msg = " " + msg
+        }
         n = strings.IndexFunc(msg, isNotAlnum)
         if n != -1 {
             m.Tag = msg[:n]
