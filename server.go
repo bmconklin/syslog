@@ -166,7 +166,7 @@ func (s *Server) receiver(c net.Conn) {
 
         // Parse msg part
         msg := string(bytes.TrimRightFunc(pkt, isNulCrLf))
-        if msg[0] != ' ' {
+        if strings.HasPrefix(msg, " ") {
             msg = " " + msg
         }
         n = strings.IndexFunc(msg, isNotAlnum)
